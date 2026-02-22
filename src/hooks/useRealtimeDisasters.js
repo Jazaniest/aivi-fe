@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useDisasterStore } from '../store/disasterStore';
 import { socketService } from '../services/socket';
@@ -18,19 +18,32 @@ export function useRealtimeDisasters() {
     // Show toast for critical new events
     if (disaster.status === 'ACTIVE' && disaster.severity === 'CRITICAL') {
       toast.custom(
-        (t) => (
-          <div
-            className={`${t.visible ? 'animate-slide-up' : 'opacity-0'} bg-red-950 border border-red-500/40 rounded-lg p-3 max-w-xs`}
-          >
-            <div className="flex items-start gap-2">
-              <span className="text-base">⚠️</span>
-              <div>
-                <p className="text-xs font-mono text-red-400 font-semibold">BENCANA BARU TERDETEKSI</p>
-                <p className="text-xs text-slate-300 mt-0.5">{disaster.name}</p>
-              </div>
-            </div>
-          </div>
-        ),
+        (t) =>
+          React.createElement(
+            'div',
+            {
+              className: `${t.visible ? 'animate-slide-up' : 'opacity-0'} bg-red-950 border border-red-500/40 rounded-lg p-3 max-w-xs`,
+            },
+            React.createElement(
+              'div',
+              { className: 'flex items-start gap-2' },
+              React.createElement('span', { className: 'text-base' }, '⚠️'),
+              React.createElement(
+                'div',
+                null,
+                React.createElement(
+                  'p',
+                  { className: 'text-xs font-mono text-red-400 font-semibold' },
+                  'BENCANA BARU TERDETEKSI'
+                ),
+                React.createElement(
+                  'p',
+                  { className: 'text-xs text-slate-300 mt-0.5' },
+                  disaster.name
+                )
+              )
+            )
+          ),
         { duration: 8000 }
       );
     }

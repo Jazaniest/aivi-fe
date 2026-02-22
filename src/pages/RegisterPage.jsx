@@ -1,20 +1,31 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuthStore } from '../store/authStore';
-import { wilayahService } from '../services/api';
 import toast from 'react-hot-toast';
+// Import data statis
+import { countries as staticCountries, regions as staticRegions, zones as staticZones } from '../utils/regionData';
 
+// Schema dengan validasi bersyarat untuk provinsi
 const schema = z.object({
   name: z.string().min(3, 'Nama minimal 3 karakter'),
   email: z.string().email('Format email tidak valid'),
   password: z.string().min(8, 'Password minimal 8 karakter'),
   confirmPassword: z.string(),
   negara_id: z.string().min(1, 'Pilih negara'),
-  provinsi_id: z.string().min(1, 'Pilih provinsi'),
+  provinsi_id: z.string().optional(), // opsional, akan divalidasi manual
   kabupaten_id: z.string().min(1, 'Pilih kabupaten/kota'),
+}).refine((data) => {
+  // Jika negara bukan Singapura, provinsi_id harus diisi
+  if (data.negara_id !== 'SG' && !data.provinsi_id) {
+    return false;
+  }
+  return true;
+}, {
+  message: 'Pilih provinsi',
+  path: ['provinsi_id'],
 }).refine((d) => d.password === d.confirmPassword, {
   message: 'Password tidak cocok',
   path: ['confirmPassword'],
@@ -54,7 +65,7 @@ export default function RegisterPage() {
   const { register: doRegister, isAuthenticated, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
 
-  const [negaraList, setNegaraList] = useState([]);
+  const [negaraList] = useState(staticCountries); // langsung dari data statis
   const [provinsiList, setProvinsiList] = useState([]);
   const [kabupatenList, setKabupatenList] = useState([]);
   const [loadingRegion, setLoadingRegion] = useState({ negara: false, provinsi: false, kabupaten: false });
@@ -66,69 +77,66 @@ export default function RegisterPage() {
     setValue,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
-
   //eslint-disable-next-line 
   const watchedNegara = watch('negara_id');
   const watchedProvinsi = watch('provinsi_id');
 
-  // Load negara on mount
+  // Simulasi loading (bisa dihilangkan karena data statis, tapi biar ada efek)
   useEffect(() => {
     setLoadingRegion((p) => ({ ...p, negara: true }));
-    wilayahService.getNegara()
-      .then(({ data }) => setNegaraList(data.data || []))
-      .catch(() => {
-        // Fallback mock
-        setNegaraList([{ id: 'ID', name: 'Indonesia' }]);
-      })
-      .finally(() => setLoadingRegion((p) => ({ ...p, negara: false })));
+    // simulasi async
+    setTimeout(() => setLoadingRegion((p) => ({ ...p, negara: false })), 300);
   }, []);
 
-  // Load provinsi when negara changes
+  // Ketika negara berubah, muat provinsi
   useEffect(() => {
     if (!watchedNegara) {
       setProvinsiList([]);
       setKabupatenList([]);
+      setValue('provinsi_id', '');
+      setValue('kabupaten_id', '');
       return;
     }
+
+    // Reset provinsi dan kabupaten
     setValue('provinsi_id', '');
     setValue('kabupaten_id', '');
-    setProvinsiList([]);
     setKabupatenList([]);
-    setLoadingRegion((p) => ({ ...p, provinsi: true }));
-    wilayahService.getProvinsi(watchedNegara)
-      .then(({ data }) => setProvinsiList(data.data || []))
-      .catch(() => {
-        // fallback mock for dev
-        setProvinsiList([
-          { id: 'JB', name: 'Jawa Barat' },
-          { id: 'JT', name: 'Jawa Tengah' },
-          { id: 'RI', name: 'Riau' },
-          { id: 'PP', name: 'Papua' },
-        ]);
-      })
-      .finally(() => setLoadingRegion((p) => ({ ...p, provinsi: false })));
+
+    // Jika negara = Singapura, tidak ada provinsi
+    if (watchedNegara === 'SG') {
+      setProvinsiList([]);
+      // Langsung muat zone untuk Singapura
+      setLoadingRegion((p) => ({ ...p, kabupaten: true }));
+      setTimeout(() => {
+        setKabupatenList(staticZones['SG'] || []);
+        setLoadingRegion((p) => ({ ...p, kabupaten: false }));
+      }, 300);
+    } else {
+      // Muat provinsi dari data statis
+      setLoadingRegion((p) => ({ ...p, provinsi: true }));
+      setTimeout(() => {
+        setProvinsiList(staticRegions[watchedNegara] || []);
+        setLoadingRegion((p) => ({ ...p, provinsi: false }));
+      }, 300);
+    }
   }, [watchedNegara, setValue]);
 
-  // Load kabupaten when provinsi changes
+  // Ketika provinsi berubah (untuk negara bukan Singapura), muat kabupaten
   useEffect(() => {
+    // Hanya jalan jika negara bukan Singapura dan provinsi dipilih
+    if (!watchedNegara || watchedNegara === 'SG') return;
     if (!watchedProvinsi) {
       setKabupatenList([]);
       return;
     }
     setValue('kabupaten_id', '');
-    setKabupatenList([]);
     setLoadingRegion((p) => ({ ...p, kabupaten: true }));
-    wilayahService.getKabupaten(watchedProvinsi)
-      .then(({ data }) => setKabupatenList(data.data || []))
-      .catch(() => {
-        setKabupatenList([
-          { id: 'BD', name: 'Kabupaten Bandung' },
-          { id: 'CI', name: 'Kabupaten Cianjur' },
-          { id: 'BDG', name: 'Kota Bandung' },
-        ]);
-      })
-      .finally(() => setLoadingRegion((p) => ({ ...p, kabupaten: false })));
-  }, [watchedProvinsi, setValue]);
+    setTimeout(() => {
+      setKabupatenList(staticZones[watchedProvinsi] || []);
+      setLoadingRegion((p) => ({ ...p, kabupaten: false }));
+    }, 300);
+  }, [watchedProvinsi, watchedNegara, setValue]);
 
   useEffect(() => {
     if (isAuthenticated) navigate('/');
@@ -142,7 +150,7 @@ export default function RegisterPage() {
       password: data.password,
       location: {
         negara_id: data.negara_id,
-        provinsi_id: data.provinsi_id,
+        provinsi_id: data.provinsi_id || null, // bisa null untuk Singapura
         kabupaten_id: data.kabupaten_id,
       },
     };
@@ -155,7 +163,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 py-8 relative">
-      {/* Background */}
+      {/* Background - sama seperti sebelumnya */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 left-1/3 w-48 h-48 bg-blue-600/5 rounded-full blur-3xl" />
@@ -182,7 +190,7 @@ export default function RegisterPage() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {/* Name */}
+            {/* Name, Email, Password - sama */}
             <div>
               <label className="block text-xs font-mono text-slate-400 mb-1.5 tracking-wider uppercase">
                 Nama Lengkap
@@ -197,7 +205,6 @@ export default function RegisterPage() {
               {errors.name && <p className="text-[11px] text-red-400 font-mono mt-1">{errors.name.message}</p>}
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-xs font-mono text-slate-400 mb-1.5 tracking-wider uppercase">
                 Email
@@ -212,7 +219,6 @@ export default function RegisterPage() {
               {errors.email && <p className="text-[11px] text-red-400 font-mono mt-1">{errors.email.message}</p>}
             </div>
 
-            {/* Password */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-xs font-mono text-slate-400 mb-1.5 tracking-wider uppercase">
@@ -261,11 +267,11 @@ export default function RegisterPage() {
                   ))}
                 </SelectField>
 
-                {/* Provinsi */}
+                {/* Provinsi - disabled jika negara Singapura atau belum pilih negara */}
                 <SelectField
                   label="Provinsi"
                   placeholder="Pilih provinsi"
-                  disabled={!watchedNegara}
+                  disabled={!watchedNegara || watchedNegara === 'SG'}
                   loading={loadingRegion.provinsi}
                   error={errors.provinsi_id?.message}
                   {...register('provinsi_id')}
@@ -275,11 +281,14 @@ export default function RegisterPage() {
                   ))}
                 </SelectField>
 
-                {/* Kabupaten */}
+                {/* Kabupaten / Kota */}
                 <SelectField
                   label="Kabupaten / Kota"
                   placeholder="Pilih kabupaten/kota"
-                  disabled={!watchedProvinsi}
+                  disabled={
+                    !watchedNegara || 
+                    (watchedNegara !== 'SG' && !watchedProvinsi) // butuh provinsi kecuali Singapura
+                  }
                   loading={loadingRegion.kabupaten}
                   error={errors.kabupaten_id?.message}
                   {...register('kabupaten_id')}

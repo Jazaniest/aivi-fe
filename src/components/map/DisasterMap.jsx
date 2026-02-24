@@ -8,7 +8,7 @@ function FlyToDisaster({ center }) {
   const map = useMap();
   useEffect(() => {
     if (center) {
-      map.flyTo(center, 10, { duration: 1.5 });
+      map.flyTo(center, 12.5, { duration: 1.5 });
     }
   }, [center, map]);
   return null;
@@ -27,7 +27,7 @@ function DisasterPopup({ disaster, isAuthenticated, userImpactLevel }) {
         <div className="flex items-start gap-2 mb-2">
           <span className="text-lg">{type.icon}</span>
           <div>
-            <p className="font-semibold text-sm leading-tight text-white">{disaster.name}</p>
+            <p className="text-sm font-semibold leading-tight text-white">{disaster.name}</p>
             <p className="text-[11px] text-slate-400 font-mono mt-0.5">{disaster.location?.kabupaten}</p>
           </div>
         </div>
@@ -48,7 +48,7 @@ function DisasterPopup({ disaster, isAuthenticated, userImpactLevel }) {
 
         {/* Full info for authorized users */}
         {hasDetailAccess && disaster.description && (
-          <p className="text-xs text-slate-300 leading-relaxed border-t border-white/10 pt-2 mb-2">
+          <p className="pt-2 mb-2 text-xs leading-relaxed border-t text-slate-300 border-white/10">
             {disaster.description.substring(0, 120)}...
           </p>
         )}
@@ -61,7 +61,7 @@ function DisasterPopup({ disaster, isAuthenticated, userImpactLevel }) {
 
         <a
           href={`/disasters/${disaster.id}`}
-          className="block text-center text-xs font-mono text-cyan-400 hover:text-cyan-300 mt-2 py-1 border-t border-white/10"
+          className="block py-1 mt-2 font-mono text-xs text-center border-t text-cyan-400 hover:text-cyan-300 border-white/10"
         >
           Lihat detail →
         </a>
@@ -86,7 +86,7 @@ export default function DisasterMap({ disasters = [], focusDisasterId = null, he
   }
 
   return (
-    <div style={{ height }} className="w-full rounded-lg overflow-hidden">
+    <div style={{ height }} className="w-full overflow-hidden rounded-lg">
       <MapContainer
         center={[-2.5, 118.0]}
         zoom={5}

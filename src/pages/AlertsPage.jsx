@@ -41,10 +41,10 @@ function AlertCard({ alert }) {
         </span>
         <span className={`text-xs font-mono font-semibold ${impact.color}`}>
           {alert.impact_level === 'DIRECT'
-            ? 'PERINGATAN KRITIS — WILAYAH ANDA TERDAMPAK LANGSUNG'
+            ? 'CRITICAL WARNING — YOUR AREA IS DIRECTLY AFFECTED'
             : alert.impact_level === 'NEARBY'
-            ? 'PERINGATAN — BENCANA DI WILAYAH SEKITAR'
-            : 'INFO — BENCANA TERDETEKSI'}
+            ? 'WARNING — DISASTER IN SURROUNDING AREA'
+            : 'INFO — DISASTER DETECTED'}
         </span>
       </div>
 
@@ -55,7 +55,7 @@ function AlertCard({ alert }) {
           <div className="flex items-start justify-between gap-2">
             <div>
               <h3 className="text-sm font-semibold text-white">{alert.disaster?.name}</h3>
-              <p className="text-xs text-slate-500 font-mono">
+              <p className="font-mono text-xs text-slate-500">
                 {alert.disaster?.location?.kabupaten}, {alert.disaster?.location?.provinsi}
               </p>
             </div>
@@ -72,9 +72,9 @@ function AlertCard({ alert }) {
 
       {/* Critical: evacuation + contacts */}
       {alert.impact_level === 'DIRECT' && alert.disaster?.evacuation_instructions && (
-        <div className="mb-3 p-3 bg-red-950/30 border border-red-500/20 rounded-lg">
-          <p className="text-[10px] font-mono text-red-400 uppercase tracking-wider mb-1">Instruksi Evakuasi</p>
-          <p className="text-xs text-slate-300 leading-relaxed">{alert.disaster.evacuation_instructions}</p>
+        <div className="p-3 mb-3 border rounded-lg bg-red-950/30 border-red-500/20">
+          <p className="text-[10px] font-mono text-red-400 uppercase tracking-wider mb-1">Evacuation Instructions</p>
+          <p className="text-xs leading-relaxed text-slate-300">{alert.disaster.evacuation_instructions}</p>
         </div>
       )}
 
@@ -84,10 +84,10 @@ function AlertCard({ alert }) {
             <a
               key={i}
               href={`tel:${c.phone}`}
-              className="p-2 bg-surface-secondary hover:bg-surface-hover border border-border rounded-lg transition-colors"
+              className="p-2 transition-colors border rounded-lg bg-surface-secondary hover:bg-surface-hover border-border"
             >
               <p className="text-[10px] text-slate-500">{c.name}</p>
-              <p className="text-xs font-mono text-cyan-400">{c.phone}</p>
+              <p className="font-mono text-xs text-cyan-400">{c.phone}</p>
             </a>
           ))}
         </div>
@@ -105,15 +105,15 @@ function AlertCard({ alert }) {
       <div className="flex gap-2">
         <Link
           to={`/map?disaster=${alert.disaster_id}`}
-          className="flex-1 text-center btn-secondary text-xs py-2"
+          className="flex-1 py-2 text-xs text-center btn-secondary"
         >
-          Lihat di Peta
+          View on Map
         </Link>
         <Link
           to={`/disasters/${alert.disaster_id}`}
-          className="flex-1 text-center btn-secondary text-xs py-2"
+          className="flex-1 py-2 text-xs text-center btn-secondary"
         >
-          Detail Bencana
+          Disaster Details
         </Link>
       </div>
     </div>
@@ -139,39 +139,39 @@ export default function AlertsPage() {
   const infoAlerts = displayAlerts.filter((a) => a.impact_level === 'NONE');
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6">
+    <div className="max-w-3xl px-4 py-6 mx-auto sm:px-6">
       {/* Header */}
       <div className="mb-5">
-        <h1 className="text-xl font-bold text-white">Peringatan Saya</h1>
+        <h1 className="text-xl font-bold text-white">My Alerts</h1>
         <div className="flex items-center gap-2 mt-1">
           <div className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <p className="text-xs text-slate-500 font-mono">
-            Berdasarkan lokasi: {user?.location?.kabupaten || 'Tidak diketahui'}
+          <p className="font-mono text-xs text-slate-500">
+            Based on your location: {user?.location?.kabupaten || 'Unknown'}
           </p>
         </div>
       </div>
 
       {/* Summary stats */}
       <div className="grid grid-cols-3 gap-2 mb-5">
-        <div className="card p-3 border-red-500/20 text-center">
-          <p className="text-xl font-mono font-bold text-red-400">{criticalAlerts.length}</p>
-          <p className="text-[10px] text-slate-500 mt-0.5">Kritis</p>
+        <div className="p-3 text-center card border-red-500/20">
+          <p className="font-mono text-xl font-bold text-red-400">{criticalAlerts.length}</p>
+          <p className="text-[10px] text-slate-500 mt-0.5">Critical</p>
         </div>
-        <div className="card p-3 border-yellow-500/20 text-center">
-          <p className="text-xl font-mono font-bold text-yellow-400">{nearbyAlerts.length}</p>
-          <p className="text-[10px] text-slate-500 mt-0.5">Peringatan</p>
+        <div className="p-3 text-center card border-yellow-500/20">
+          <p className="font-mono text-xl font-bold text-yellow-400">{nearbyAlerts.length}</p>
+          <p className="text-[10px] text-slate-500 mt-0.5">Warning</p>
         </div>
-        <div className="card p-3 text-center">
-          <p className="text-xl font-mono font-bold text-cyan-400">{infoAlerts.length}</p>
-          <p className="text-[10px] text-slate-500 mt-0.5">Informasi</p>
+        <div className="p-3 text-center card">
+          <p className="font-mono text-xl font-bold text-cyan-400">{infoAlerts.length}</p>
+          <p className="text-[10px] text-slate-500 mt-0.5">Information</p>
         </div>
       </div>
 
       {displayAlerts.length === 0 ? (
-        <div className="text-center py-16">
-          <div className="text-4xl mb-3">✅</div>
-          <p className="text-slate-300 font-medium">Tidak ada peringatan aktif</p>
-          <p className="text-sm text-slate-500 mt-1">Wilayah Anda aman dari bencana yang terpantau</p>
+        <div className="py-16 text-center">
+          <div className="mb-3 text-4xl">✅</div>
+          <p className="font-medium text-slate-300">No active alerts</p>
+          <p className="mt-1 text-sm text-slate-500">Your area is safe from monitored disasters</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -180,7 +180,7 @@ export default function AlertsPage() {
             <div>
               <h2 className="text-xs font-mono text-red-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-                Peringatan Kritis
+                Critical Alerts
               </h2>
               <div className="space-y-3">
                 {criticalAlerts.map((a) => <AlertCard key={a.id} alert={a} />)}
@@ -192,7 +192,7 @@ export default function AlertsPage() {
             <div>
               <h2 className="text-xs font-mono text-yellow-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-yellow-500" />
-                Wilayah Sekitar
+                Surrounding Area
               </h2>
               <div className="space-y-3">
                 {nearbyAlerts.map((a) => <AlertCard key={a.id} alert={a} />)}
@@ -202,7 +202,7 @@ export default function AlertsPage() {
 
           {infoAlerts.length > 0 && (
             <div>
-              <h2 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">Informasi Umum</h2>
+              <h2 className="mb-2 font-mono text-xs tracking-wider uppercase text-slate-400">General Information</h2>
               <div className="space-y-3">
                 {infoAlerts.map((a) => <AlertCard key={a.id} alert={a} />)}
               </div>

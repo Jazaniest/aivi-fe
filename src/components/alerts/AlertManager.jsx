@@ -12,13 +12,13 @@ export function CriticalAlertModal({ alert, onAcknowledge }) {
   };
 
   return (
-    <div className="fixed inset-0 z-9000 flex items-center justify-center p-4">
+    <div className="fixed inset-0 flex items-center justify-center p-4 z-9000">
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
       {/* Pulsing border effect */}
       <div
-        className="absolute inset-4 sm:inset-16 rounded-2xl border-2 border-red-500/30 pointer-events-none"
+        className="absolute border-2 pointer-events-none inset-4 sm:inset-16 rounded-2xl border-red-500/30"
         style={{ animation: 'pulseRed 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }}
       />
 
@@ -27,20 +27,20 @@ export function CriticalAlertModal({ alert, onAcknowledge }) {
         style={{ boxShadow: '0 0 60px rgba(239, 68, 68, 0.3), 0 0 120px rgba(239, 68, 68, 0.1)' }}
       >
         {/* Red top bar */}
-        <div className="h-1 w-full bg-linear-to-r from-red-700 via-red-500 to-red-700 rounded-t-xl" />
+        <div className="w-full h-1 bg-linear-to-r from-red-700 via-red-500 to-red-700 rounded-t-xl" />
 
         <div className="p-5 sm:p-6">
           {/* Header */}
           <div className="flex items-start gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-red-500/20 border border-red-500/40 flex items-center justify-center text-xl shrink-0 animate-pulse">
+            <div className="flex items-center justify-center w-10 h-10 text-xl border rounded-full bg-red-500/20 border-red-500/40 shrink-0 animate-pulse">
               ⚠️
             </div>
             <div>
               <div className="font-mono text-[10px] text-red-400 tracking-widest mb-1">
-                SIAGA I — PERINGATAN KRITIS
+                ALERT LEVEL I — CRITICAL WARNING
               </div>
-              <h2 className="text-lg sm:text-xl font-bold text-white leading-tight">
-                {alert.disaster?.name || 'Bencana Terdeteksi'}
+              <h2 className="text-lg font-bold leading-tight text-white sm:text-xl">
+                {alert.disaster?.name || 'Disaster Detected'}
               </h2>
               <p className="text-xs text-slate-400 font-mono mt-0.5">
                 {formatRelativeTime(alert.disaster?.occurred_at)} · {alert.disaster?.location?.kabupaten}
@@ -49,8 +49,8 @@ export function CriticalAlertModal({ alert, onAcknowledge }) {
           </div>
 
           {/* Description */}
-          <div className="bg-red-950/40 border border-red-500/20 rounded-lg p-3 mb-4">
-            <p className="text-sm text-slate-300 leading-relaxed">
+          <div className="p-3 mb-4 border rounded-lg bg-red-950/40 border-red-500/20">
+            <p className="text-sm leading-relaxed text-slate-300">
               {alert.disaster?.description}
             </p>
           </div>
@@ -59,10 +59,10 @@ export function CriticalAlertModal({ alert, onAcknowledge }) {
           {alert.disaster?.evacuation_instructions && (
             <div className="mb-4">
               <div className="font-mono text-xs text-red-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <span className="w-3 h-3 rounded-full bg-red-500 inline-block" />
-                Instruksi Evakuasi
+                <span className="inline-block w-3 h-3 bg-red-500 rounded-full" />
+                Evacuation Instructions
               </div>
-              <p className="text-sm text-white leading-relaxed bg-surface-secondary rounded-lg p-3">
+              <p className="p-3 text-sm leading-relaxed text-white rounded-lg bg-surface-secondary">
                 {alert.disaster?.evacuation_instructions}
               </p>
             </div>
@@ -71,8 +71,8 @@ export function CriticalAlertModal({ alert, onAcknowledge }) {
           {/* Emergency contacts */}
           {alert.disaster?.emergency_contacts?.length > 0 && (
             <div className="mb-5">
-              <div className="font-mono text-xs text-slate-400 uppercase tracking-wider mb-2">
-                Kontak Darurat
+              <div className="mb-2 font-mono text-xs tracking-wider uppercase text-slate-400">
+                Emergency Contacts
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {alert.disaster.emergency_contacts.map((contact, i) => (
@@ -82,7 +82,7 @@ export function CriticalAlertModal({ alert, onAcknowledge }) {
                     className="flex flex-col bg-surface-secondary hover:bg-surface-hover border border-border rounded-lg p-2.5 transition-colors"
                   >
                     <span className="text-xs text-slate-400">{contact.name}</span>
-                    <span className="text-sm font-mono font-semibold text-cyan-400">{contact.phone}</span>
+                    <span className="font-mono text-sm font-semibold text-cyan-400">{contact.phone}</span>
                   </a>
                 ))}
               </div>
@@ -95,18 +95,18 @@ export function CriticalAlertModal({ alert, onAcknowledge }) {
               to={`/map?disaster=${alert.disaster?.id}`}
               className="flex-1 text-center btn-secondary text-xs py-2.5"
             >
-              Lihat di Peta
+              View on Map
             </Link>
             <button
               onClick={handleAcknowledge}
               className="flex-1 btn-danger text-xs py-2.5 font-mono tracking-wide"
             >
-              SAYA MENGERTI
+              I UNDERSTAND
             </button>
           </div>
 
           <p className="text-center text-[10px] text-slate-600 font-mono mt-3">
-            Peringatan ini tidak dapat ditutup tanpa konfirmasi
+            This alert cannot be dismissed without confirmation
           </p>
         </div>
       </div>
@@ -128,33 +128,33 @@ export function NearbyWarningBanner({ alert, onDismiss }) {
       className={`fixed top-14 left-0 right-0 z-8000 transition-all duration-300 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full'}`}
     >
       <div
-        className="bg-yellow-900/80 border-b border-yellow-500/40 backdrop-blur-sm"
+        className="border-b bg-yellow-900/80 border-yellow-500/40 backdrop-blur-sm"
         style={{ boxShadow: '0 4px 20px rgba(234, 179, 8, 0.15)' }}
       >
         <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center gap-3">
           <span className="text-base shrink-0">🔔</span>
           <div className="flex-1 min-w-0">
-            <span className="text-xs font-mono text-yellow-400 font-semibold">
-              PERINGATAN WILAYAH SEKITAR
+            <span className="font-mono text-xs font-semibold text-yellow-400">
+              SURROUNDING AREA WARNING
             </span>
-            <span className="text-xs text-yellow-200/80 ml-2">
+            <span className="ml-2 text-xs text-yellow-200/80">
               {alert.disaster?.name} — {alert.disaster?.location?.kabupaten}
             </span>
-            <span className="hidden sm:inline text-xs text-slate-400 ml-2">
+            <span className="hidden ml-2 text-xs sm:inline text-slate-400">
               {formatRelativeTime(alert.disaster?.occurred_at)}
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Link
               to={`/disasters/${alert.disaster?.id}`}
-              className="text-xs font-mono text-yellow-400 hover:text-yellow-300 underline underline-offset-2"
+              className="font-mono text-xs text-yellow-400 underline hover:text-yellow-300 underline-offset-2"
             >
-              Detail
+              Details
             </Link>
             <button
               onClick={handleDismiss}
-              className="text-yellow-500 hover:text-white transition-colors text-sm"
-              aria-label="Tutup peringatan"
+              className="text-sm text-yellow-500 transition-colors hover:text-white"
+              aria-label="Close warning"
             >
               ✕
             </button>
@@ -170,14 +170,14 @@ export function InfoAlertStrip({ alerts }) {
   if (!alerts || alerts.length === 0) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-7000 max-w-xs animate-slide-up">
-      <div className="card p-3 border-border/80">
+    <div className="fixed max-w-xs bottom-4 left-4 z-7000 animate-slide-up">
+      <div className="p-3 card border-border/80">
         <div className="flex items-start gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 mt-1.5 shrink-0" />
           <div>
-            <p className="text-xs font-mono text-cyan-400 mb-0.5">INFO BENCANA</p>
+            <p className="text-xs font-mono text-cyan-400 mb-0.5">DISASTER INFO</p>
             <p className="text-xs text-slate-400">
-              Ada {alerts.length} bencana aktif di{' '}
+              There {alerts.length === 1 ? 'is' : 'are'} {alerts.length} active {alerts.length === 1 ? 'disaster' : 'disasters'} in{' '}
               {[...new Set(alerts.map((a) => a.disaster?.location?.provinsi))].slice(0, 2).join(', ')}
             </p>
           </div>

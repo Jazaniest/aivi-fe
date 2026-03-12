@@ -53,21 +53,21 @@ export default function Navbar() {
   }, [mobileMenuOpen]);
 
   const navLinks = [
-    { to: '/', label: 'Beranda', end: true },
-    { to: '/disasters', label: 'Bencana' },
-    { to: '/map', label: 'Peta' },
-    ...(isAuthenticated ? [{ to: '/alerts', label: 'Peringatan', badge: totalAlerts, critical: criticalAlerts.length > 0 }] : []),
+    { to: '/', label: 'Home', end: true },
+    { to: '/disasters', label: 'Disasters' },
+    { to: '/map', label: 'Map' },
+    ...(isAuthenticated ? [{ to: '/alerts', label: 'Alerts', badge: totalAlerts, critical: criticalAlerts.length > 0 }] : []),
   ];
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 glass-surface border-b border-border" ref={headerRef}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b glass-surface border-border" ref={headerRef}>
+        <div className="flex items-center justify-between gap-4 px-4 mx-auto max-w-7xl sm:px-6 h-14">
 
           {/* Logo */}
           <NavLink to="/" className="flex items-center gap-2.5 shrink-0">
             <div className="relative w-7 h-7">
-              <div className="absolute inset-0 rounded bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center border rounded bg-cyan-500/20 border-cyan-500/40">
                 <svg viewBox="0 0 20 20" fill="none" className="w-4 h-4">
                   <circle cx="10" cy="10" r="3" fill="#06b6d4" />
                   <path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" />
@@ -79,13 +79,13 @@ export default function Navbar() {
               )}
             </div>
             <div>
-              <span className="font-mono font-semibold text-white tracking-wider text-sm">AIVI</span>
-              <span className="hidden sm:inline text-xs text-slate-500 ml-2">Disaster Alert System</span>
+              <span className="font-mono text-sm font-semibold tracking-wider text-white">AIVI</span>
+              <span className="hidden ml-2 text-xs sm:inline text-slate-500">Disaster Alert System</span>
             </div>
           </NavLink>
 
           {/* ─── DESKTOP Nav ─────────────────────────────────────── */}
-          <nav className="hidden sm:flex items-center gap-4">
+          <nav className="items-center hidden gap-4 sm:flex">
             {navLinks.map(({ to, label, end, badge, critical }) => (
               <NavLink
                 key={to}
@@ -106,40 +106,40 @@ export default function Navbar() {
           </nav>
 
           {/* ─── DESKTOP Auth ────────────────────────────────────── */}
-          <div className="hidden sm:flex items-center gap-2 shrink-0">
+          <div className="items-center hidden gap-2 sm:flex shrink-0">
             {isAuthenticated ? (
               <div className="flex items-center gap-2">
                 <div className="flex flex-col items-end">
-                  <span className="text-xs text-white font-medium leading-none">{user?.name?.split(' ')[0]}</span>
+                  <span className="text-xs font-medium leading-none text-white">{user?.name?.split(' ')[0]}</span>
                   <span className="text-[10px] text-slate-500 font-mono leading-none mt-0.5">
-                    {user?.location?.kabupaten || 'Lokasi tidak diketahui'}
+                    {user?.location?.kabupaten || 'Unknown location'}
                   </span>
                 </div>
-                <div className="w-7 h-7 rounded bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xs font-mono font-semibold">
+                <div className="flex items-center justify-center font-mono text-xs font-semibold border rounded w-7 h-7 bg-cyan-500/20 border-cyan-500/30 text-cyan-400">
                   {user?.name?.[0]?.toUpperCase() || 'U'}
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="text-xs text-slate-500 hover:text-red-400 transition-colors px-2 py-1 rounded hover:bg-red-500/10 font-mono"
+                  className="px-2 py-1 font-mono text-xs transition-colors rounded text-slate-500 hover:text-red-400 hover:bg-red-500/10"
                 >
-                  Keluar
+                  Logout
                 </button>
               </div>
             ) : (
               <>
-                <NavLink to="/login" className="btn-secondary text-xs py-1.5 px-3">Masuk</NavLink>
-                <NavLink to="/register" className="btn-primary text-xs py-1.5 px-3">Daftar</NavLink>
+                <NavLink to="/login" className="btn-secondary text-xs py-1.5 px-3">Login</NavLink>
+                <NavLink to="/register" className="btn-primary text-xs py-1.5 px-3">Register</NavLink>
               </>
             )}
           </div>
 
           {/* ─── MOBILE Right side ───────────────────────────────── */}
-          <div className="flex sm:hidden items-center gap-2">
+          <div className="flex items-center gap-2 sm:hidden">
             {/* Alert badge shortcut */}
             {isAuthenticated && totalAlerts > 0 && (
               <NavLink
                 to="/alerts"
-                className="relative w-8 h-8 flex items-center justify-center rounded hover:bg-surface-secondary transition-colors"
+                className="relative flex items-center justify-center w-8 h-8 transition-colors rounded hover:bg-surface-secondary"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-slate-400">
                   <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -153,7 +153,7 @@ export default function Navbar() {
 
             {/* Avatar (if logged in) */}
             {isAuthenticated && (
-              <div className="w-7 h-7 rounded bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xs font-mono font-semibold shrink-0">
+              <div className="flex items-center justify-center font-mono text-xs font-semibold border rounded w-7 h-7 bg-cyan-500/20 border-cyan-500/30 text-cyan-400 shrink-0">
                 {user?.name?.[0]?.toUpperCase() || 'U'}
               </div>
             )}
@@ -209,19 +209,19 @@ export default function Navbar() {
           ))}
 
           {/* Divider */}
-          <div className="h-px bg-border/50 my-2" />
+          <div className="h-px my-2 bg-border/50" />
 
           {/* Auth section */}
           {isAuthenticated ? (
             <div className="space-y-1">
               <div className="flex items-center gap-3 px-3 py-2">
-                <div className="w-8 h-8 rounded bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xs font-mono font-semibold shrink-0">
+                <div className="flex items-center justify-center w-8 h-8 font-mono text-xs font-semibold border rounded bg-cyan-500/20 border-cyan-500/30 text-cyan-400 shrink-0">
                   {user?.name?.[0]?.toUpperCase() || 'U'}
                 </div>
                 <div>
-                  <p className="text-xs text-white font-medium">{user?.name}</p>
+                  <p className="text-xs font-medium text-white">{user?.name}</p>
                   <p className="text-[10px] text-slate-500 font-mono">
-                    {user?.location?.kabupaten || 'Lokasi tidak diketahui'}
+                    {user?.location?.kabupaten || 'Unknown location'}
                   </p>
                 </div>
               </div>
@@ -234,16 +234,16 @@ export default function Navbar() {
                   <polyline points="16 17 21 12 16 7" />
                   <line x1="21" y1="12" x2="9" y2="12" />
                 </svg>
-                Keluar
+                Logout
               </button>
             </div>
           ) : (
             <div className="flex gap-2 pb-1">
-              <NavLink to="/login" className="flex-1 btn-secondary text-xs py-2 text-center">
-                Masuk
+              <NavLink to="/login" className="flex-1 py-2 text-xs text-center btn-secondary">
+                Login
               </NavLink>
-              <NavLink to="/register" className="flex-1 btn-primary text-xs py-2 text-center">
-                Daftar
+              <NavLink to="/register" className="flex-1 py-2 text-xs text-center btn-primary">
+                Register
               </NavLink>
             </div>
           )}
@@ -253,7 +253,7 @@ export default function Navbar() {
       {/* Backdrop */}
       {mobileMenuOpen && (
         <div
-          className="sm:hidden fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 z-40 sm:hidden bg-black/40 backdrop-blur-sm"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}

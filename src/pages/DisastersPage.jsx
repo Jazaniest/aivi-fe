@@ -4,32 +4,32 @@ import DisasterCard from '../components/ui/DisasterCard';
 import { formatRelativeTime } from '../utils/helpers';
 
 const DISASTER_TYPES = [
-  { value: '', label: 'Semua Tipe' },
-  { value: 'BANJIR', label: 'Banjir' },
-  { value: 'GEMPA', label: 'Gempa Bumi' },
-  { value: 'KEBAKARAN', label: 'Kebakaran' },
+  { value: '', label: 'All Types' },
+  { value: 'BANJIR', label: 'Flood' },
+  { value: 'GEMPA', label: 'Earthquake' },
+  { value: 'KEBAKARAN', label: 'Fire' },
   { value: 'TSUNAMI', label: 'Tsunami' },
-  { value: 'LONGSOR', label: 'Longsor' },
-  { value: 'GUNUNG_BERAPI', label: 'Gunung Berapi' },
-  { value: 'ANGIN_PUTING', label: 'Angin Puting Beliung' },
+  { value: 'LONGSOR', label: 'Landslide' },
+  { value: 'GUNUNG_BERAPI', label: 'Volcano' },
+  { value: 'ANGIN_PUTING', label: 'Tornado' },
 ];
 
 const PROVINCES = [
-  { value: '', label: 'Semua Provinsi' },
-  { value: 'JB', label: 'Jawa Barat' },
-  { value: 'JT', label: 'Jawa Tengah' },
-  { value: 'JI', label: 'Jawa Timur' },
+  { value: '', label: 'All Provinces' },
+  { value: 'JB', label: 'West Java' },
+  { value: 'JT', label: 'Central Java' },
+  { value: 'JI', label: 'East Java' },
   { value: 'RI', label: 'Riau' },
   { value: 'PP', label: 'Papua' },
   { value: 'KL', label: 'Kalimantan' },
-  { value: 'SU', label: 'Sumatera Utara' },
+  { value: 'SU', label: 'North Sumatra' },
 ];
 
 const STATUSES = [
-  { value: '', label: 'Semua Status' },
-  { value: 'ACTIVE', label: 'Aktif' },
+  { value: '', label: 'All Status' },
+  { value: 'ACTIVE', label: 'Active' },
   { value: 'MONITORING', label: 'Monitoring' },
-  { value: 'RESOLVED', label: 'Selesai' },
+  { value: 'RESOLVED', label: 'Resolved' },
 ];
 
 function FilterSelect({ value, onChange, options }) {
@@ -83,10 +83,10 @@ export default function DisastersPage() {
       {/* Page header */}
       <div className="flex flex-col justify-between gap-3 mb-5 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-xl font-bold text-white">Informasi Bencana</h1>
+          <h1 className="text-xl font-bold text-white">Disaster Information</h1>
           <p className="text-xs text-slate-500 font-mono mt-0.5">
-            {displayDisasters.length} kejadian ditemukan
-            {lastUpdated && ` · diperbarui ${formatRelativeTime(lastUpdated)}`}
+            {displayDisasters.length} incidents found
+            {lastUpdated && ` · updated ${formatRelativeTime(lastUpdated)}`}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -114,7 +114,7 @@ export default function DisastersPage() {
                 <path d="M1 7a6 6 0 0 1 6-6 6 6 0 0 1 4.24 1.76M13 7a6 6 0 0 1-6 6 6 6 0 0 1-4.24-1.76M11 2v3h-3M3 12V9h3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             )}
-            Perbarui
+            Refresh
           </button>
         </div>
       </div>
@@ -131,7 +131,7 @@ export default function DisastersPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari nama, lokasi..."
+            placeholder="Search name, location..."
             className="py-2 pl-8 text-xs input-field"
           />
         </div>
@@ -159,7 +159,7 @@ export default function DisastersPage() {
             onClick={resetFilters}
             className="text-xs font-mono text-red-400 hover:text-red-300 px-2 py-1.5 rounded hover:bg-red-500/10 transition-all"
           >
-            Hapus filter
+            Clear filters
           </button>
         )}
       </div>
@@ -182,9 +182,9 @@ export default function DisastersPage() {
       ) : displayDisasters.length === 0 ? (
         <div className="py-16 text-center">
           <div className="mb-3 text-4xl">🔍</div>
-          <p className="text-sm text-slate-400">Tidak ada bencana yang cocok dengan filter</p>
+          <p className="text-sm text-slate-400">No disasters match the filters</p>
           <button onClick={resetFilters} className="mt-3 font-mono text-xs text-cyan-400 hover:text-cyan-300">
-            Reset filter
+            Reset filters
           </button>
         </div>
       ) : (

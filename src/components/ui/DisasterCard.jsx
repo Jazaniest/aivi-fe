@@ -19,7 +19,7 @@ export default function DisasterCard({ disaster, compact = false }) {
           <span className="text-base mt-0.5">{type.icon}</span>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-white truncate">{disaster.name}</p>
-            <p className="text-xs text-slate-500 truncate">{disaster.location?.kabupaten}</p>
+            <p className="text-xs truncate text-slate-500">{disaster.location?.kabupaten}</p>
           </div>
           <span className={`shrink-0 font-mono text-[10px] px-1.5 py-0.5 rounded border ${severity.bgColor} ${severity.textColor} ${severity.borderColor}`}>
             {severity.label}
@@ -41,13 +41,13 @@ export default function DisasterCard({ disaster, compact = false }) {
         <div className="pl-2">
           {/* Header */}
           <div className="flex items-start justify-between gap-2 mb-2.5">
-            <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center min-w-0 gap-2">
               <span className="text-lg">{type.icon}</span>
               <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-white truncate group-hover:text-cyan-300 transition-colors">
+                <h3 className="text-sm font-semibold text-white truncate transition-colors group-hover:text-cyan-300">
                   {disaster.name}
                 </h3>
-                <p className="text-xs text-slate-500 font-mono">
+                <p className="font-mono text-xs text-slate-500">
                   {disaster.location?.kabupaten}, {disaster.location?.provinsi}
                 </p>
               </div>
@@ -69,7 +69,7 @@ export default function DisasterCard({ disaster, compact = false }) {
             <span>{formatRelativeTime(disaster.occurred_at)}</span>
             {disaster.affected_count && (
               <span className="text-slate-600">
-                ~{formatNumber(disaster.affected_count)} terdampak
+                ~{formatNumber(disaster.affected_count)} affected
               </span>
             )}
           </div>

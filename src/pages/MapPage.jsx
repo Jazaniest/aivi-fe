@@ -63,15 +63,15 @@ export default function MapPage() {
   return (
     <div className="h-[calc(100vh-56px)] flex">
       {/* ─── DESKTOP SIDEBAR ─────────────────────────────────── */}
-      <div className="hidden sm:flex w-72 shrink-0 flex-col bg-navy-800 border-r border-border overflow-hidden">
+      <div className="flex-col hidden overflow-hidden border-r sm:flex w-72 shrink-0 bg-navy-800 border-border">
         {/* Header */}
         <div className="p-3 border-b border-border">
-          <h2 className="text-sm font-semibold text-white mb-2">Peta Bencana</h2>
+          <h2 className="mb-2 text-sm font-semibold text-white">Disaster Map</h2>
           <div className="flex gap-1">
             {[
-              { value: 'ALL', label: 'Semua' },
-              { value: 'ACTIVE', label: 'Aktif' },
-              { value: 'CRITICAL', label: 'Kritis' },
+              { value: 'ALL', label: 'All' },
+              { value: 'ACTIVE', label: 'Active' },
+              { value: 'CRITICAL', label: 'Critical' },
             ].map(({ value, label }) => (
               <button
                 key={value}
@@ -90,13 +90,13 @@ export default function MapPage() {
 
         {/* Legend */}
         <div className="px-3 py-2 border-b border-border/50">
-          <p className="text-[10px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Legenda</p>
+          <p className="text-[10px] font-mono text-slate-600 uppercase tracking-wider mb-1.5">Legend</p>
           <div className="flex flex-wrap gap-x-3 gap-y-1">
             {[
-              { color: '#ef4444', label: 'Kritis' },
-              { color: '#f97316', label: 'Tinggi' },
-              { color: '#eab308', label: 'Sedang' },
-              { color: '#22c55e', label: 'Rendah' },
+              { color: '#ef4444', label: 'Critical' },
+              { color: '#f97316', label: 'High' },
+              { color: '#eab308', label: 'Medium' },
+              { color: '#22c55e', label: 'Low' },
             ].map(({ color, label }) => (
               <div key={label} className="flex items-center gap-1.5">
                 <div className="w-3 h-2 rounded-sm opacity-70" style={{ backgroundColor: color }} />
@@ -109,9 +109,9 @@ export default function MapPage() {
         {/* Disaster list */}
         <div className="flex-1 overflow-y-auto p-2 space-y-1.5">
           {isLoading && filteredDisasters.length === 0 ? (
-            <div className="space-y-2 p-1">
+            <div className="p-1 space-y-2">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="skeleton h-16 rounded" />
+                <div key={i} className="h-16 rounded skeleton" />
               ))}
             </div>
           ) : (
@@ -132,14 +132,14 @@ export default function MapPage() {
         {!isAuthenticated && (
           <div className="p-3 border-t border-border bg-navy-900/50">
             <p className="text-[10px] text-slate-500 leading-relaxed">
-              Login untuk melihat detail lengkap pada setiap polygon bencana
+              Login to see full details on each disaster polygon
             </p>
           </div>
         )}
       </div>
 
       {/* ─── MAP (full width on mobile) ──────────────────────── */}
-      <div className="flex-1 relative">
+      <div className="relative flex-1">
         <DisasterMap
           disasters={filteredDisasters}
           focusDisasterId={selectedId}
@@ -155,11 +155,11 @@ export default function MapPage() {
             </div>
             <div className="space-y-1">
               <div className="flex justify-between">
-                <span className="text-slate-600">Tampil:</span>
+                <span className="text-slate-600">Showing:</span>
                 <span className="text-white">{filteredDisasters.length}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600">Aktif:</span>
+                <span className="text-slate-600">Active:</span>
                 <span className="text-red-400">
                   {filteredDisasters.filter((d) => d.status === 'ACTIVE').length}
                 </span>
@@ -174,21 +174,21 @@ export default function MapPage() {
           if (!d) return null;
           const sev = getSeverityConfig(d.severity);
           return (
-            <div className="hidden sm:block absolute bottom-3 left-3 right-3 sm:right-auto sm:max-w-xs z-1000">
-              <div className="glass-surface rounded-lg p-3 animate-slide-up">
+            <div className="absolute hidden sm:block bottom-3 left-3 right-3 sm:right-auto sm:max-w-xs z-1000">
+              <div className="p-3 rounded-lg glass-surface animate-slide-up">
                 <div className="flex items-start justify-between gap-2">
                   <div>
                     <p className="text-sm font-semibold text-white">{d.name}</p>
-                    <p className="text-xs text-slate-400 font-mono">{d.location?.kabupaten}</p>
+                    <p className="font-mono text-xs text-slate-400">{d.location?.kabupaten}</p>
                   </div>
                   <button
                     onClick={() => setSelectedId(null)}
-                    className="text-slate-500 hover:text-white transition-colors"
+                    className="transition-colors text-slate-500 hover:text-white"
                   >
                     ✕
                   </button>
                 </div>
-                <div className="mt-2 flex gap-2">
+                <div className="flex gap-2 mt-2">
                   <span className={sev.badgeClass}>{sev.label}</span>
                 </div>
               </div>
@@ -212,20 +212,20 @@ export default function MapPage() {
         >
           {/* Drag handle */}
           <div
-            className="shrink-0 flex flex-col items-center pt-2 pb-1 cursor-grab active:cursor-grabbing"
+            className="flex flex-col items-center pt-2 pb-1 shrink-0 cursor-grab active:cursor-grabbing"
             onTouchStart={handleDragStart}
             onTouchEnd={handleDragEnd}
             onMouseDown={handleDragStart}
             onMouseUp={handleDragEnd}
           >
-            <div className="w-10 h-1 rounded-full bg-slate-600 mb-2" />
+            <div className="w-10 h-1 mb-2 rounded-full bg-slate-600" />
 
             {/* Compact header row */}
-            <div className="w-full px-3 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-white">Peta Bencana</h2>
+            <div className="flex items-center justify-between w-full px-3">
+              <h2 className="text-sm font-semibold text-white">Disaster Map</h2>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-mono text-slate-500">
-                  {filteredDisasters.length} bencana
+                  {filteredDisasters.length} disasters
                 </span>
                 {/* Chevron toggle */}
                 <button
@@ -234,7 +234,7 @@ export default function MapPage() {
                       h === 'peek' ? 'half' : h === 'half' ? 'full' : 'peek'
                     )
                   }
-                  className="text-slate-500 hover:text-white transition-colors p-1"
+                  className="p-1 transition-colors text-slate-500 hover:text-white"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -256,12 +256,12 @@ export default function MapPage() {
           </div>
 
           {/* Filter tabs */}
-          <div className="shrink-0 px-3 pb-2">
+          <div className="px-3 pb-2 shrink-0">
             <div className="flex gap-1">
               {[
-                { value: 'ALL', label: 'Semua' },
-                { value: 'ACTIVE', label: 'Aktif' },
-                { value: 'CRITICAL', label: 'Kritis' },
+                { value: 'ALL', label: 'All' },
+                { value: 'ACTIVE', label: 'Active' },
+                { value: 'CRITICAL', label: 'Critical' },
               ].map(({ value, label }) => (
                 <button
                   key={value}
@@ -297,7 +297,7 @@ export default function MapPage() {
                     <span className={sev.badgeClass + ' text-[10px]'}>{sev.label}</span>
                     <button
                       onClick={() => setSelectedId(null)}
-                      className="text-slate-500 hover:text-white transition-colors text-xs leading-none"
+                      className="text-xs leading-none transition-colors text-slate-500 hover:text-white"
                     >
                       ✕
                     </button>
@@ -310,9 +310,9 @@ export default function MapPage() {
           {/* Scrollable list */}
           <div className="flex-1 overflow-y-auto p-2 space-y-1.5 overscroll-contain">
             {isLoading && filteredDisasters.length === 0 ? (
-              <div className="space-y-2 p-1">
+              <div className="p-1 space-y-2">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="skeleton h-16 rounded" />
+                  <div key={i} className="h-16 rounded skeleton" />
                 ))}
               </div>
             ) : (
@@ -336,9 +336,9 @@ export default function MapPage() {
 
           {/* Auth notice */}
           {!isAuthenticated && (
-            <div className="shrink-0 px-3 py-2 border-t border-border bg-navy-900/50">
+            <div className="px-3 py-2 border-t shrink-0 border-border bg-navy-900/50">
               <p className="text-[10px] text-slate-500 leading-relaxed">
-                Login untuk melihat detail lengkap pada setiap polygon bencana
+                Login to see full details on each disaster polygon
               </p>
             </div>
           )}

@@ -55,7 +55,7 @@ function DisasterPopup({ disaster, isAuthenticated, userImpactLevel }) {
 
         {!hasDetailAccess && (
           <p className="text-[11px] text-slate-500 italic border-t border-white/10 pt-2">
-            Login untuk melihat detail lengkap
+            Login to see full details
           </p>
         )}
 
@@ -63,7 +63,7 @@ function DisasterPopup({ disaster, isAuthenticated, userImpactLevel }) {
           href={`/disasters/${disaster.id}`}
           className="block py-1 mt-2 font-mono text-xs text-center border-t text-cyan-400 hover:text-cyan-300 border-white/10"
         >
-          Lihat detail →
+          View details →
         </a>
       </div>
     </Popup>

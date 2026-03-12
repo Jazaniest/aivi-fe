@@ -37,50 +37,50 @@ export default function HomePage() {
   const monitoringCount = displayDisasters.filter((d) => d.status === 'MONITORING').length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+    <div className="px-4 py-6 mx-auto max-w-7xl sm:px-6">
       {/* Hero section */}
       <div className="relative mb-8 overflow-hidden">
         <div className="py-8 sm:py-12">
           {/* Ambient glow */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-0 h-32 -translate-x-1/2 rounded-full pointer-events-none left-1/2 w-96 bg-cyan-500/10 blur-3xl" />
 
           <div className="relative">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-              <span className="font-mono text-xs text-slate-400 tracking-widest uppercase">
-                Sistem Aktif — {activeCount} Bencana Dipantau
+              <span className="font-mono text-xs tracking-widest uppercase text-slate-400">
+                System Active — {activeCount} Disasters Monitored
               </span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">
-              Informasi Bencana{' '}
+            <h1 className="mb-3 text-3xl font-bold leading-tight text-white sm:text-4xl">
+              Disaster Information{' '}
               <span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
                 Real-Time
               </span>
             </h1>
-            <p className="text-slate-400 text-base max-w-xl leading-relaxed">
-              Platform peringatan dan informasi bencana berbasis AI untuk seluruh wilayah Indonesia.
-              {!isAuthenticated && ' Daftar untuk menerima peringatan sesuai lokasi Anda.'}
+            <p className="max-w-xl text-base leading-relaxed text-slate-400">
+              AI-based disaster alert and information platform for all regions of Indonesia.
+              {!isAuthenticated && ' Register to receive alerts based on your location.'}
             </p>
 
             {!isAuthenticated && (
               <div className="flex gap-3 mt-5">
                 <Link to="/register" className="btn-primary">
-                  Daftar Sekarang
+                  Register Now
                 </Link>
                 <Link to="/disasters" className="btn-secondary">
-                  Lihat Bencana
+                  View Disasters
                 </Link>
               </div>
             )}
 
             {isAuthenticated && (
-              <div className="mt-4 inline-flex items-center gap-2 bg-surface border border-border rounded-lg px-4 py-2">
-                <div className="w-2 h-2 rounded-full bg-green-500" />
+              <div className="inline-flex items-center gap-2 px-4 py-2 mt-4 border rounded-lg bg-surface border-border">
+                <div className="w-2 h-2 bg-green-500 rounded-full" />
                 <span className="text-sm text-slate-300">
-                  Anda masuk sebagai{' '}
-                  <span className="text-white font-medium">{user?.name?.split(' ')[0]}</span>
+                  You are logged in as{' '}
+                  <span className="font-medium text-white">{user?.name?.split(' ')[0]}</span>
                   {user?.location?.kabupaten && (
-                    <> · <span className="text-cyan-400 text-xs font-mono">{user.location.kabupaten}</span></>
+                    <> · <span className="font-mono text-xs text-cyan-400">{user.location.kabupaten}</span></>
                   )}
                 </span>
               </div>
@@ -90,32 +90,32 @@ export default function HomePage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-        <StatCard value={displayDisasters.length} label="Total Kejadian" color="cyan" />
-        <StatCard value={activeCount} label="Bencana Aktif" color="red" />
-        <StatCard value={criticalCount} label="Status Kritis" color="yellow" />
-        <StatCard value={monitoringCount} label="Dalam Pemantauan" color="green" />
+      <div className="grid grid-cols-2 gap-3 mb-8 sm:grid-cols-4">
+        <StatCard value={displayDisasters.length} label="Total Incidents" color="cyan" />
+        <StatCard value={activeCount} label="Active Disasters" color="red" />
+        <StatCard value={criticalCount} label="Critical Status" color="yellow" />
+        <StatCard value={monitoringCount} label="Under Monitoring" color="green" />
       </div>
 
       {/* Main content grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Disaster list */}
         <div className="lg:col-span-2">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-white">Bencana Terkini</h2>
+              <h2 className="text-sm font-semibold text-white">Recent Disasters</h2>
               {isLoading && (
-                <span className="w-3 h-3 border border-slate-600 border-t-cyan-500 rounded-full animate-spin" />
+                <span className="w-3 h-3 border rounded-full border-slate-600 border-t-cyan-500 animate-spin" />
               )}
             </div>
             <div className="flex items-center gap-2">
               {lastUpdated && (
                 <span className="text-[10px] text-slate-600 font-mono">
-                  Diperbarui {formatRelativeTime(lastUpdated)}
+                  Updated {formatRelativeTime(lastUpdated)}
                 </span>
               )}
-              <Link to="/disasters" className="text-xs text-cyan-400 hover:text-cyan-300 transition-colors font-mono">
-                Lihat semua →
+              <Link to="/disasters" className="font-mono text-xs transition-colors text-cyan-400 hover:text-cyan-300">
+                View all →
               </Link>
             </div>
           </div>
@@ -130,13 +130,13 @@ export default function HomePage() {
         {/* Sidebar */}
         <div className="space-y-4">
           {/* Quick links */}
-          <div className="card p-4">
-            <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">Akses Cepat</h3>
+          <div className="p-4 card">
+            <h3 className="mb-3 font-mono text-xs tracking-wider uppercase text-slate-400">Quick Access</h3>
             <div className="space-y-2">
               {[
-                { to: '/map', label: '🗺️ Peta Bencana', desc: 'Visualisasi polygon wilayah terdampak' },
-                { to: '/disasters', label: '📋 Daftar Bencana', desc: 'Filter dan cari bencana' },
-                ...(isAuthenticated ? [{ to: '/alerts', label: '🔔 Peringatan Saya', desc: 'Peringatan sesuai lokasi Anda' }] : []),
+                { to: '/map', label: '🗺️ Disaster Map', desc: 'Polygon visualization of affected areas' },
+                { to: '/disasters', label: '📋 Disaster List', desc: 'Filter and search disasters' },
+                ...(isAuthenticated ? [{ to: '/alerts', label: '🔔 My Alerts', desc: 'Alerts based on your location' }] : []),
               ].map(({ to, label, desc }) => (
                 <Link
                   key={to}
@@ -144,10 +144,10 @@ export default function HomePage() {
                   className="flex items-center gap-3 p-2.5 rounded-lg hover:bg-surface-secondary transition-colors group"
                 >
                   <div className="flex-1">
-                    <p className="text-sm text-white group-hover:text-cyan-300 transition-colors">{label}</p>
+                    <p className="text-sm text-white transition-colors group-hover:text-cyan-300">{label}</p>
                     <p className="text-xs text-slate-500 mt-0.5">{desc}</p>
                   </div>
-                  <svg viewBox="0 0 12 12" fill="none" className="w-3 h-3 text-slate-600 group-hover:text-cyan-400 transition-colors">
+                  <svg viewBox="0 0 12 12" fill="none" className="w-3 h-3 transition-colors text-slate-600 group-hover:text-cyan-400">
                     <path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Link>
@@ -156,14 +156,14 @@ export default function HomePage() {
           </div>
 
           {/* System status */}
-          <div className="card p-4">
-            <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-3">Status Sistem</h3>
+          <div className="p-4 card">
+            <h3 className="mb-3 font-mono text-xs tracking-wider uppercase text-slate-400">System Status</h3>
             <div className="space-y-2">
               {[
-                { label: 'Data Real-time', status: 'online' },
-                { label: 'Analisis AI', status: 'online' },
-                { label: 'Sensor BMKG', status: 'online' },
-                { label: 'Notifikasi Push', status: 'degraded' },
+                { label: 'Real-time Data', status: 'online' },
+                { label: 'AI Analysis', status: 'online' },
+                { label: 'BMKG Sensors', status: 'online' },
+                { label: 'Push Notifications', status: 'degraded' },
               ].map(({ label, status }) => (
                 <div key={label} className="flex items-center justify-between">
                   <span className="text-xs text-slate-400">{label}</span>
@@ -182,7 +182,7 @@ export default function HomePage() {
                         status === 'online' ? 'text-green-400' : status === 'degraded' ? 'text-yellow-400' : 'text-red-400'
                       }`}
                     >
-                      {status === 'online' ? 'ONLINE' : status === 'degraded' ? 'TERGANGGU' : 'OFFLINE'}
+                      {status === 'online' ? 'ONLINE' : status === 'degraded' ? 'DEGRADED' : 'OFFLINE'}
                     </span>
                   </div>
                 </div>
@@ -192,16 +192,16 @@ export default function HomePage() {
 
           {/* Info box */}
           {!isAuthenticated && (
-            <div className="card p-4 border-cyan-500/20 bg-cyan-500/5">
+            <div className="p-4 card border-cyan-500/20 bg-cyan-500/5">
               <div className="flex items-start gap-2">
                 <span className="text-cyan-400 text-base mt-0.5">ℹ️</span>
                 <div>
-                  <p className="text-xs font-semibold text-cyan-300 mb-1">Daftar untuk Peringatan</p>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    Pengguna terdaftar menerima peringatan real-time berdasarkan lokasi, rekomendasi AI, dan akses penuh ke peta terdampak.
+                  <p className="mb-1 text-xs font-semibold text-cyan-300">Register for Alerts</p>
+                  <p className="text-xs leading-relaxed text-slate-400">
+                    Registered users receive real-time alerts based on location, AI recommendations, and full access to affected area maps.
                   </p>
-                  <Link to="/register" className="inline-block mt-2 text-xs text-cyan-400 hover:text-cyan-300 font-mono underline underline-offset-2">
-                    Daftar gratis →
+                  <Link to="/register" className="inline-block mt-2 font-mono text-xs underline text-cyan-400 hover:text-cyan-300 underline-offset-2">
+                    Register for free →
                   </Link>
                 </div>
               </div>

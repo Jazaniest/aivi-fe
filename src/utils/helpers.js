@@ -1,9 +1,9 @@
 import { formatDistanceToNow, format } from 'date-fns';
-import { id as idLocale } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 
 export const severityConfig = {
   CRITICAL: {
-    label: 'KRITIS',
+    label: 'CRITICAL',
     color: '#ef4444',
     polygonColor: '#ef4444',
     fillColor: 'rgba(239, 68, 68, 0.25)',
@@ -14,7 +14,7 @@ export const severityConfig = {
     ringColor: 'ring-red-500/30',
   },
   HIGH: {
-    label: 'TINGGI',
+    label: 'HIGH',
     color: '#f97316',
     polygonColor: '#f97316',
     fillColor: 'rgba(249, 115, 22, 0.25)',
@@ -25,7 +25,7 @@ export const severityConfig = {
     ringColor: 'ring-orange-500/30',
   },
   MEDIUM: {
-    label: 'SEDANG',
+    label: 'MEDIUM',
     color: '#eab308',
     polygonColor: '#eab308',
     fillColor: 'rgba(234, 179, 8, 0.25)',
@@ -36,7 +36,7 @@ export const severityConfig = {
     ringColor: 'ring-yellow-500/30',
   },
   LOW: {
-    label: 'RENDAH',
+    label: 'LOW',
     color: '#22c55e',
     polygonColor: '#22c55e',
     fillColor: 'rgba(34, 197, 94, 0.25)',
@@ -49,19 +49,19 @@ export const severityConfig = {
 };
 
 export const disasterTypeConfig = {
-  BANJIR: { label: 'Banjir', icon: '🌊' },
-  GEMPA: { label: 'Gempa Bumi', icon: '🌍' },
-  KEBAKARAN: { label: 'Kebakaran', icon: '🔥' },
+  BANJIR: { label: 'Flood', icon: '🌊' },
+  GEMPA: { label: 'Earthquake', icon: '🌍' },
+  KEBAKARAN: { label: 'Fire', icon: '🔥' },
   TSUNAMI: { label: 'Tsunami', icon: '🌊' },
-  LONGSOR: { label: 'Longsor', icon: '⛰️' },
-  GUNUNG_BERAPI: { label: 'Gunung Berapi', icon: '🌋' },
-  ANGIN_PUTING: { label: 'Angin Puting Beliung', icon: '🌪️' },
-  KEKERINGAN: { label: 'Kekeringan', icon: '🌵' },
+  LONGSOR: { label: 'Landslide', icon: '⛰️' },
+  GUNUNG_BERAPI: { label: 'Volcano', icon: '🌋' },
+  ANGIN_PUTING: { label: 'Tornado', icon: '🌪️' },
+  KEKERINGAN: { label: 'Drought', icon: '🌵' },
 };
 
 export const statusConfig = {
   ACTIVE: {
-    label: 'Aktif',
+    label: 'Active',
     dotClass: 'status-dot-active',
     textColor: 'text-red-400',
   },
@@ -71,7 +71,7 @@ export const statusConfig = {
     textColor: 'text-yellow-400',
   },
   RESOLVED: {
-    label: 'Selesai',
+    label: 'Resolved',
     dotClass: 'status-dot-resolved',
     textColor: 'text-green-400',
   },
@@ -81,7 +81,7 @@ export function formatRelativeTime(dateStr) {
   try {
     return formatDistanceToNow(new Date(dateStr), {
       addSuffix: true,
-      locale: idLocale,
+      locale: enUS,
     });
   } catch {
     return '-';
@@ -90,7 +90,7 @@ export function formatRelativeTime(dateStr) {
 
 export function formatDateTime(dateStr) {
   try {
-    return format(new Date(dateStr), 'dd MMM yyyy, HH:mm', { locale: idLocale });
+    return format(new Date(dateStr), 'dd MMM yyyy, HH:mm', { locale: enUS });
   } catch {
     return '-';
   }
@@ -98,7 +98,7 @@ export function formatDateTime(dateStr) {
 
 export function formatNumber(n) {
   if (!n) return '0';
-  return new Intl.NumberFormat('id-ID').format(n);
+  return new Intl.NumberFormat('en-US').format(n);
 }
 
 export function getSeverityConfig(severity) {
@@ -118,21 +118,21 @@ export function getImpactConfig(impactLevel) {
   const map = {
     DIRECT: {
       level: 'CRITICAL',
-      label: 'Terdampak Langsung',
+      label: 'Directly Affected',
       color: 'text-red-400',
       bg: 'bg-red-500/20',
       border: 'border-red-500/40',
     },
     NEARBY: {
       level: 'WARNING',
-      label: 'Wilayah Sekitar',
+      label: 'Surrounding Area',
       color: 'text-yellow-400',
       bg: 'bg-yellow-500/20',
       border: 'border-yellow-500/40',
     },
     NONE: {
       level: 'SAFE',
-      label: 'Tidak Terdampak',
+      label: 'Not Affected',
       color: 'text-green-400',
       bg: 'bg-green-500/20',
       border: 'border-green-500/40',

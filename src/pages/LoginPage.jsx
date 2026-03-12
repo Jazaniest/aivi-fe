@@ -7,8 +7,8 @@ import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 
 const schema = z.object({
-  email: z.string().email('Format email tidak valid'),
-  password: z.string().min(6, 'Password minimal 6 karakter'),
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 export default function LoginPage() {
@@ -29,37 +29,37 @@ export default function LoginPage() {
   const onSubmit = async (data) => {
     const result = await login(data);
     if (result.success) {
-      toast.success('Selamat datang kembali!');
+      toast.success('Welcome back!');
       navigate('/');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative">
+    <div className="relative flex items-center justify-center min-h-screen p-4">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 right-1/4 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute w-64 h-64 rounded-full top-1/4 left-1/4 bg-cyan-500/5 blur-3xl" />
+        <div className="absolute w-48 h-48 rounded-full bottom-1/3 right-1/4 bg-blue-500/5 blur-3xl" />
       </div>
 
       <div className="w-full max-w-sm animate-slide-up">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 mb-4">
+        <div className="mb-8 text-center">
+          <div className="inline-flex items-center justify-center w-12 h-12 mb-4 border rounded-xl bg-cyan-500/10 border-cyan-500/30">
             <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
               <circle cx="12" cy="12" r="4" fill="#06b6d4" opacity="0.9" />
               <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
             </svg>
           </div>
-          <h1 className="text-xl font-bold text-white">Masuk ke AIVI</h1>
-          <p className="text-sm text-slate-500 mt-1">Sistem Peringatan Bencana Berbasis AI</p>
+          <h1 className="text-xl font-bold text-white">Sign in to AIVI</h1>
+          <p className="mt-1 text-sm text-slate-500">AI-Based Disaster Alert System</p>
         </div>
 
         {/* Form card */}
-        <div className="card p-6">
+        <div className="p-6 card">
           {/* Error alert */}
           {error && (
-            <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded text-xs text-red-400 font-mono animate-fade-in">
+            <div className="p-3 mb-4 font-mono text-xs text-red-400 border rounded bg-red-500/10 border-red-500/30 animate-fade-in">
               {error}
             </div>
           )}
@@ -73,7 +73,7 @@ export default function LoginPage() {
               <input
                 {...register('email')}
                 type="email"
-                placeholder="nama@email.com"
+                placeholder="name@email.com"
                 className="input-field"
                 autoComplete="email"
               />
@@ -103,34 +103,34 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full btn-primary py-3 disabled:opacity-50 disabled:cursor-not-allowed mt-2 flex items-center justify-center gap-2"
+              className="flex items-center justify-center w-full gap-2 py-3 mt-2 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>
-                  <span className="w-4 h-4 border-2 border-navy-900 border-t-transparent rounded-full animate-spin" />
-                  Memverifikasi...
+                  <span className="w-4 h-4 border-2 rounded-full border-navy-900 border-t-transparent animate-spin" />
+                  Verifying...
                 </>
               ) : (
-                'Masuk'
+                'Sign in'
               )}
             </button>
           </form>
 
           {/* Footer */}
-          <div className="mt-5 pt-4 border-t border-border text-center">
+          <div className="pt-4 mt-5 text-center border-t border-border">
             <p className="text-xs text-slate-500">
-              Belum punya akun?{' '}
-              <Link to="/register" className="text-cyan-400 hover:text-cyan-300 transition-colors font-medium">
-                Daftar sekarang
+              Don't have an account?{' '}
+              <Link to="/register" className="font-medium transition-colors text-cyan-400 hover:text-cyan-300">
+                Register now
               </Link>
             </p>
           </div>
         </div>
 
         {/* Guest access */}
-        <div className="text-center mt-4">
-          <Link to="/disasters" className="text-xs text-slate-600 hover:text-slate-400 transition-colors">
-            Lihat informasi bencana tanpa login →
+        <div className="mt-4 text-center">
+          <Link to="/disasters" className="text-xs transition-colors text-slate-600 hover:text-slate-400">
+            View disaster information without login →
           </Link>
         </div>
       </div>

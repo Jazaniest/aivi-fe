@@ -24,7 +24,7 @@ export const useAuthStore = create(
           set({ user, token, isAuthenticated: true, isLoading: false });
           return { success: true };
         } catch (err) {
-          const message = err.response?.data?.message || 'Login gagal. Periksa email dan password Anda.';
+          const message = err.response?.data?.message || 'Login failed. Check your email and password..';
           set({ isLoading: false, error: message });
           return { success: false, message };
         }
@@ -42,7 +42,7 @@ export const useAuthStore = create(
           set({ user, token, isAuthenticated: true, isLoading: false });
           return { success: true };
         } catch (err) {
-          const message = err.response?.data?.message || 'Registrasi gagal. Silakan coba lagi.';
+          const message = err.response?.data?.message || 'Registration failed. Please try again.';
           set({ isLoading: false, error: message });
           return { success: false, message };
         }

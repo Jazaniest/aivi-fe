@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { mockAuthService } from './mockAuth';
+// import { mockAuthService } from './mockAuth';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
-const useMock = import.meta.env.VITE_MOCK_API === 'true';
+// const useMock = import.meta.env.VITE_MOCK_API === 'true';
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -37,20 +37,20 @@ api.interceptors.response.use(
 );
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
-// export const authService = {
-//   login: (credentials) => api.post('/auth/login', credentials),
-//   register: (data) => api.post('/auth/register', data),
-//   me: () => api.get('/auth/me'),
-//   logout: () => api.post('/auth/logout'),
-// };
-export const authService = useMock
-  ? mockAuthService
-  : {
-      login: (credentials) => api.post('/auth/login', credentials),
-      register: (data) => api.post('/auth/register', data),
-      me: () => api.get('/auth/me'),
-      logout: () => api.post('/auth/logout'),
-    };
+export const authService = {
+  login: (credentials) => api.post('/auth/login', credentials),
+  register: (data) => api.post('/auth/register', data),
+  me: () => api.get('/auth/me'),
+  logout: () => api.post('/auth/logout'),
+};
+// export const authService = useMock
+//   ? mockAuthService
+//   : {
+//       login: (credentials) => api.post('/auth/login', credentials),
+//       register: (data) => api.post('/auth/register', data),
+//       me: () => api.get('/auth/me'),
+//       logout: () => api.post('/auth/logout'),
+//     };
 
 // ─── Wilayah (Region) ────────────────────────────────────────────────────────
 export const wilayahService = {
